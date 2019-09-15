@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.berkaltug.employeemanagement.EmployeeDTO;
 import com.berkaltug.employeemanagement.domain.Employee;
+import com.berkaltug.employeemanagement.service.CaptchaValidator;
 import com.berkaltug.employeemanagement.service.EmployeeService;
 
 @RestController
@@ -26,7 +29,8 @@ public class EmployeeController {
 	
 	@Autowired
 	EmployeeService employeeService;
-	
+	@Autowired
+	CaptchaValidator captchaService;
 	@CrossOrigin
 	@GetMapping("/all")
 	public List<Employee> getAll(){
@@ -41,8 +45,17 @@ public class EmployeeController {
 	
 	@CrossOrigin
 	@PostMapping("/add")
-	public void addEmployee(@Valid @RequestBody Employee employee) {
-		employeeService.insertEmployee(employee);
+	public void addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+		Employee employee=employeeDTO.getEmployee();
+		Boolean isValidCaptcha=captchaService.validateCaptcha(employeeDTO.getCaptchaResponse());
+		
+		if(isValidCaptcha) {
+			try {
+				employeeService.insertEmployee(employee);
+			}catch(Exception e) {
+				System.err.println(e);
+			}
+		}	
 	}
 	
 	@CrossOrigin
