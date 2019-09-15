@@ -54,7 +54,7 @@ public class EmployeeController {
 	@CrossOrigin
 	@PutMapping("/update")
 	public void updateEmployee(@Valid @RequestBody Employee emp) {
-		employeeService.insertEmployee(emp);
+		employeeService.updateEmployee(emp);
 	}
 	
 	

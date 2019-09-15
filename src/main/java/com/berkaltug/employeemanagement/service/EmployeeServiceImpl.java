@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
 	SequenceGeneratorService sequenceGeneratorService;
+	
+	@Autowired 
+	MongoOperations mongoOperation;
 	
 	@Override
 	public List<Employee> findAll() {
@@ -57,17 +61,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee updateEmployee(Employee emp) {
-		Employee em=employeeRepo.findById(emp.getEmployeeId()).get();
-		em.setName(emp.getName());
-		em.setSurname(emp.getSurname());
-		em.setEmail(emp.getEmail());
-		em.setTel(emp.getTel());
+		Employee em=null;
 		try {
-			employeeRepo.save(em);
+
+			em=employeeRepo.save(emp);
+			
 		}catch(Exception e) {
 			System.err.println(e);
 		}
-		
 		return em;
 	}
 
