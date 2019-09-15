@@ -16,8 +16,8 @@
 
 <body>
     <div>
-        <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background-color: rgb(128,221,241);">
-            <div class="container"><a class="navbar-brand" href="#" style="margin-left: 5px;">Employee Management</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background-color: #60aaba;">
+            <div class="container"><a class="navbar-brand" href="#" style="margin-left: 5px; color:white;"><b>Employee Management</b></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div
                     class="collapse navbar-collapse" id="navcol-1"><button class="btn btn-primary ml-auto" type="button"  data-toggle="modal" data-target="#myModal">Add Employee</button></div>
     </div>
@@ -65,12 +65,14 @@
                 <div class="modal-header" style="background-color: #5995a2;">
                     <h4 class="modal-title">Update New Employee</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
                 <div class="modal-body">
-                    <div><input type="text" id="nameInput2" placeholder="Name" style="width: 300px;">
-                      <input type="text" id="surnameInput2" style="width: 300px;" placeholder="Surname">
-                      <input type="text" id="telInput2" style="width: 300px;" placeholder="Telephone Number">
+                    <div>
+                      	<input type="text" id="idInput2" placeholder="Name" style="width: 300px;" readonly="true">
+                      	<input type="text" id="nameInput2" placeholder="Name" style="width: 300px;">
+                      	<input type="text" id="surnameInput2" style="width: 300px;" placeholder="Surname">
+                      	<input type="text" id="telInput2" style="width: 300px;" placeholder="Telephone Number">
                         <input type="text" id="mailInput2" style="width: 300px;" placeholder="Email"></div>
                 </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" data-dismiss="modal" onclick="">Save</button></div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" data-dismiss="modal" onclick="updateEmployee()">Save</button></div>
             </div>
         </div>
     </div>
@@ -141,16 +143,50 @@
 				/* önce tabloyu boşalt */
 				$('#mytable tbody').find('tr').remove();
 				loadTable();
+				alert("Successfull");
 			},
+			error:function(xhr, status, error) {
+				/* springin döndürdüğü cevaptaki @NotNull() vb içindeki message */
+				  alert(xhr.responseJSON.errors[0].defaultMessage);
+				}
+		 });
+	 };
+	 
+	 function updateEmployee(){
+		 /* $('input').attr('readonly', false);		 
+		 console.log($('idInput2').val()+$("#nameInput2").val()+$("#surnameInput2").val()+$("#telInput2").val()+$("#mailInput2").val()) */
+		 $.ajax({
+			 type:"PUT",
+			 contentType:"application/json",
+			 /* dataType ekleme yoksa success'e girmiyor */
+			 async:"true",
+			 url:"http://127.0.0.1:8080/employee/update",
+			 data: JSON.stringify({
+				  "employeeId":$('#idInput2').val(),
+				  "name": $("#nameInput2").val() ,
+				  "surname" :$("#surnameInput2").val(),
+				  "tel": $("#telInput2").val(),
+				  "email" : $("#mailInput2").val()
+				  }),
+			success:function(data){
+				$('#mytable tbody').find('tr').remove();
+				loadTable();
+				alert("Successfull");
+			},
+			error:function(xhr, status, error) {
+				/* springin döndürdüğü cevaptaki @NotNull() vb içindeki message */
+				  alert(xhr.responseJSON.errors[0].defaultMessage);
+				}
 		 });
 	 };
 	 
 		/* tablodaki update butonu için  */  
 	$('#mytable').on('click','.btn-success',function(){
-		 $('#nameInput2').val( $(this).closest('tr').find('td:eq(0)').text());
-		 $('#surnameInput2').val( $(this).closest('tr').find('td:eq(1)').text());
-		 $('#telInput2').val( $(this).closest('tr').find('td:eq(2)').text());
-		 $('#mailInput2').val( $(this).closest('tr').find('td:eq(3)').text());
+		 $('#idInput2').val($(this).closest('tr').find('td:eq(0)').text());
+		 $('#nameInput2').val( $(this).closest('tr').find('td:eq(1)').text());
+		 $('#surnameInput2').val( $(this).closest('tr').find('td:eq(2)').text());
+		 $('#telInput2').val( $(this).closest('tr').find('td:eq(3)').text());
+		 $('#mailInput2').val( $(this).closest('tr').find('td:eq(4)').text());
 		 
 	});
 	
