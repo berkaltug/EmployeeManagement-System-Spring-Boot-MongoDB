@@ -9,40 +9,12 @@
     <link rel="stylesheet" href="../static/css/Navigation-Clean.css">
     <link rel="stylesheet" href="../static/css/Navigation-with-Button.css">
     <link rel="stylesheet" href="../static/css/styles.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">		
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   
 </head>
 
 <body>
-<script type="text/javascript">
-    	$("document").ready(function(){
-    		$.ajax({
-    			type:"GET",
-    			contentType: "application/json",
-    	        dataType: 'json',
-    	        async:true,
-    			url:"http://127.0.0.1:8080/employee/all",
-    			success:function(data){
-    				
-    				 $.each(data, function(index, item) {
-    					 $('#mytable tbody').append(
-    							 "<tr><td>" + item.employeeId + "</td>"
-    							 + "<td>" + item.name + "</td>"
-    							 + "<td>" + item.surname + "</td>"
-    							 + "<td>" + item.tel + "</td>"
-    							 + "<td>" + item.email + "</td>"
-    							 + "<td>"
-                                 +'<div class="btn-group" role="group" aria-label="...">'
-                                 + '<a  class="btn btn-success"><i class="fa fa-edit" style="color:white"></i></a>'
-                                 + '<a  class="btn btn-danger"><i class="fas fa-trash-alt" style="color:white"></i></a>'
-                             	 + '</div>'
-                         		 + '</td>'
-    							 + "</tr>");
-    	            }); 
-    			}
-    		});
-    	});
-    </script>
     <div>
         <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background-color: rgb(128,221,241);">
             <div class="container"><a class="navbar-brand" href="#" style="margin-left: 5px;">Employee Management</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
@@ -59,34 +31,152 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Surname</th>
-                        <th>Telephone</th>
+                        <th>Phone</th>
                         <th>Email</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>
     </div>
+    <!-- ekleme modalı -->
     <div class="modal fade" role="dialog" tabindex="-1" id="myModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #5995a2;">
                     <h4 class="modal-title">Add New Employee</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
                 <div class="modal-body">
-                    <div><input type="text" id="input1" placeholder="Name" style="width: 300px;"><input type="text" id="input1" style="width: 300px;" placeholder="Surname"><input type="text" id="input1" style="width: 300px;" placeholder="Telephone Number">
-                        <input
-                            type="text" id="input1" style="width: 300px;" placeholder="Email"></div>
+                    <div><input type="text" id="nameInput" placeholder="Name" style="width: 300px;">
+                      <input type="text" id="surnameInput" style="width: 300px;" placeholder="Surname">
+                      <input type="text" id="telInput" style="width: 300px;" placeholder="Telephone Number">
+                        <input type="text" id="mailInput" style="width: 300px;" placeholder="Email"></div>
                 </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" data-dismiss="modal" onclick="addEmployee()">Save</button></div>
             </div>
         </div>
     </div>
-    
-    
-    
+    <!-- update modalı -->
+    <div class="modal fade" role="dialog" tabindex="-1" id="myModal2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #5995a2;">
+                    <h4 class="modal-title">Update New Employee</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <div class="modal-body">
+                    <div><input type="text" id="nameInput2" placeholder="Name" style="width: 300px;">
+                      <input type="text" id="surnameInput2" style="width: 300px;" placeholder="Surname">
+                      <input type="text" id="telInput2" style="width: 300px;" placeholder="Telephone Number">
+                        <input type="text" id="mailInput2" style="width: 300px;" placeholder="Email"></div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" data-dismiss="modal" onclick="">Save</button></div>
+            </div>
+        </div>
+    </div>
+    <!-- silme onay modalı -->
+    <div class="modal fade" role="dialog" tabindex="-1" id="myModal3">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #5995a2;">
+                    <h4 class="modal-title">Alert !</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <div class="modal-body">
+                    <h4>Are you sure to delete this item ?</h4>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" data-dismiss="modal">Yes</button></div>
+            </div>
+        </div>
+    </div>
+
+	
+	<script>
+	$("document").ready(function(){
+		loadTable();
+	});
+	
+	 function loadTable(){
+		 $.ajax({
+			    type:"GET",
+			    contentType: "application/json",
+			        dataType: 'json',
+			        async:true,
+			    url:"http://127.0.0.1:8080/employee/all",
+			    success:function(data){
+					
+			       $.each(data, function(index, item) {
+			         $('#mytable tbody').append(
+			             "<tr><td>" + item.employeeId + "</td>"
+			             + "<td>" + item.name + "</td>"
+			             + "<td>" + item.surname + "</td>"
+			             + "<td>" + item.tel + "</td>"
+			             + "<td>" + item.email + "</td>"
+			             + "<td>"
+			                           + '<div class="btn-group" role="group" aria-label="...">'
+			                           + '<button  class="btn btn-success" data-toggle="modal" data-target="#myModal2"><i class="fa fa-edit" style="color:white"></i></button>'
+			                           + '<button  class="btn btn-danger" data-toggle="modal" data-target="#myModal3"><i class="fas fa-trash-alt" style="color:white"></i></button>'
+			                           + '</div>'
+			                           + '</td>'
+			             + "</tr>");
+			            });
+			    }
+			  });
+	 };
+	 
+	 
+	 /* eleman ekleme fonk. */
+	 function addEmployee(){
+	/* console.log($("#nameInput").val(),$("#surnameInput").val(),$("#telInput").val(),$("#mailInput").val()); */
+		 $.ajax({
+			 type:"POST",
+			 contentType:"application/json",
+			 /* dataType ekleme yoksa success'e girmiyor */
+			 async:"true",
+			 url:"http://127.0.0.1:8080/employee/add",
+			 data: JSON.stringify({"name": $("#nameInput").val() ,
+				 				  "surname" :$("#surnameInput").val(),
+				 				  "tel": $("#telInput").val(),
+				 				  "email" : $("#mailInput").val()
+				 				  }),
+			success:function(data){
+				/* önce tabloyu boşalt */
+				$('#mytable tbody').find('tr').remove();
+				loadTable();
+			},
+		 });
+	 };
+	 
+		/* tablodaki update butonu için  */  
+	$('#mytable').on('click','.btn-success',function(){
+		 $('#nameInput2').val( $(this).closest('tr').find('td:eq(0)').text());
+		 $('#surnameInput2').val( $(this).closest('tr').find('td:eq(1)').text());
+		 $('#telInput2').val( $(this).closest('tr').find('td:eq(2)').text());
+		 $('#mailInput2').val( $(this).closest('tr').find('td:eq(3)').text());
+		 
+	});
+	
+	/* tablodaki silme butonu için */
+	$('#mytable').on('click','.btn-danger', function(){
+		 let row=$(this).closest('tr');
+		 let id=row.find('td:eq(0)').text();
+		 console.log(id);
+		 $('#myModal3').on('click','.btn-primary' , function(){
+			 $.ajax({
+				    type:"DELETE",
+				    contentType: "application/json",
+				        async:true,
+				    url:"http://127.0.0.1:8080/employee/delete/" + id,
+				    success:function(data){
+				    	console.log("deleted");
+				    	/* önce tabloyu boşalt */
+						$('#mytable tbody').find('tr').remove();
+						loadTable();
+				    }
+			 })
+		 });
+		 
+	 });
+	
+	</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 

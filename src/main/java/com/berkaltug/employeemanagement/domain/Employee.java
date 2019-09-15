@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,16 +17,17 @@ public class Employee {
 	
 	@Id
 	private Integer employeeId;
-	@NotEmpty
+	@NotEmpty(message="Name can't be blank")
 	private String name;
-	@NotEmpty
+	@NotEmpty(message="Surname can't be blank")
 	private String surname;
-	@Pattern(regexp ="[0-9\\s]{10}")
-	private Long tel;
-	@Email
+	@Pattern(regexp ="\\d{3}-\\d{7}", message="Phone number must be 10 digit long")
+	private String tel;
+	
+	@Email(message="Please provide a valid email")
 	private String email;
 
-	public Employee(Integer employeeId, String name, String surname, Long tel, String email) {
+	public Employee(Integer employeeId, String name, String surname, String tel, String email) {
 		this.employeeId = employeeId;
 		this.name = name;
 		this.surname = surname;
@@ -60,11 +62,11 @@ public class Employee {
 		this.surname = surname;
 	}
 
-	public Long getTel() {
+	public String getTel() {
 		return tel;
 	}
 
-	public void setTel(Long tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 

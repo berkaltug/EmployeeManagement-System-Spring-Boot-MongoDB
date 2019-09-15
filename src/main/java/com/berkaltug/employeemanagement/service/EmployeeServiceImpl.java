@@ -15,14 +15,14 @@ import com.berkaltug.employeemanagement.repository.EmployeeRepository;
 public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
-	EmployeeRepository er;
+	EmployeeRepository employeeRepo;
 	
 	@Autowired
 	SequenceGeneratorService sequenceGeneratorService;
 	
 	@Override
 	public List<Employee> findAll() {
-		return er.findAll();
+		return employeeRepo.findAll();
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee emp = null;
 		
 		try {
-			emp=er.findById(id).get();
+			emp=employeeRepo.findById(id).get();
 		}catch(Exception e) {
 				System.err.println(e);
 		}
@@ -41,14 +41,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Employee findOne(String name, String surname) {
 		
-		return er.findByNameAndSurname(name, surname);
+		return employeeRepo.findByNameAndSurname(name, surname);
 	}
 
 	@Override
 	public void deleteOne(Integer id) {
 		try {
-			Employee emp=er.findById(id).get();
-			er.delete(emp);
+			Employee emp=employeeRepo.findById(id).get();
+			employeeRepo.delete(emp);
 		}catch(Exception e) {
 			System.err.println(e);
 		}
@@ -57,10 +57,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee updateEmployee(Employee emp) {
-		Employee em=null;
-		
+		Employee em=employeeRepo.findById(emp.getEmployeeId()).get();
+		em.setName(emp.getName());
+		em.setSurname(emp.getSurname());
+		em.setEmail(emp.getEmail());
+		em.setTel(emp.getTel());
 		try {
-			em=er.save(emp);
+			employeeRepo.save(em);
 		}catch(Exception e) {
 			System.err.println(e);
 		}
@@ -73,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee em=null;
 		emp.setEmployeeId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
 		try {
-			em=er.save(emp);
+			em=employeeRepo.save(emp);
 		}catch(Exception e){
 			System.err.println(e);
 		}

@@ -18,21 +18,27 @@ import com.berkaltug.employeemanagement.service.EmployeeService;
 class EmployeeManagementApplicationTests {
 	
 	@Autowired
-	EmployeeService es;
+	EmployeeService employeeService;
 	
 	
 	@Test
 	public void shouldInsertEmployee() {
-		Employee emp = new Employee (3,"berk","altuğ",5063556964L,"berkaltug96@gmail.com");
-		Employee e=es.insertEmployee(emp);
+		Employee emp = new Employee (3,"berk","altuğ","506-3556964","berkaltug96@gmail.com");
+		Employee e=employeeService.insertEmployee(emp);
 		assertNotNull(e);
 	}
 	
 	@Test
 	public void canFind() {
-		Employee emp=es.findOne(3);
+		Employee emp=employeeService.findOne(3);
 		assertNotNull(emp);
 		System.out.println(emp);
 	}
-
+	
+	@Test
+	public void canDelete() {
+		employeeService.deleteOne(1);
+		Employee emp=employeeService.findOne(1);
+		Assert.isNull(emp);
+	}
 }

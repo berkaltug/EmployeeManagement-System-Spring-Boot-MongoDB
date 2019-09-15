@@ -2,6 +2,8 @@ package com.berkaltug.employeemanagement.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,33 +25,36 @@ import com.berkaltug.employeemanagement.service.EmployeeService;
 public class EmployeeController {
 	
 	@Autowired
-	EmployeeService es;
+	EmployeeService employeeService;
 	
 	@CrossOrigin
 	@GetMapping("/all")
-	@ResponseStatus(HttpStatus.ACCEPTED)
 	public List<Employee> getAll(){
-		return es.findAll();
+		return employeeService.findAll();
 	}
 	
 	@CrossOrigin
 	@GetMapping("/{id}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
 	public Employee findEmployee(@PathVariable("id") Integer id) {
-		return es.findOne(id);
+		return employeeService.findOne(id);
 	}
 	
 	@CrossOrigin
 	@PostMapping("/add")
-	public void addEmployee(@RequestBody Employee employee) {
-		es.insertEmployee(employee);
+	public void addEmployee(@Valid @RequestBody Employee employee) {
+		employeeService.insertEmployee(employee);
 	}
 	
 	@CrossOrigin
 	@DeleteMapping("/delete/{id}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void deleteEmployee(@PathVariable("id")Integer id) {
-		es.deleteOne(id);
+		employeeService.deleteOne(id);
+	}
+	
+	@CrossOrigin
+	@PutMapping("/update")
+	public void updateEmployee(@Valid @RequestBody Employee emp) {
+		employeeService.insertEmployee(emp);
 	}
 	
 	
