@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.berkaltug.employeemanagement.domain.Employee;
 @Repository
 public interface EmployeeRepository extends MongoRepository<Employee,Integer>{
-	//Auto generated query kullandık
-	Employee findByNameAndSurname(String name,String surname);
+	
 }

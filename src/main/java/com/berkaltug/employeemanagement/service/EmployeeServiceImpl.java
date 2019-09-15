@@ -42,11 +42,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return emp;
 	}
 
-	@Override
-	public Employee findOne(String name, String surname) {
-		
-		return employeeRepo.findByNameAndSurname(name, surname);
-	}
 
 	@Override
 	public void deleteOne(Integer id) {
